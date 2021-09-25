@@ -2,6 +2,8 @@ package com.vm.emp.controllers;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @Api(value = "Employee Rest end points")
 public class EmployeeController {
+	
+	public static final Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
     @Autowired
     private EmployeeService service;
@@ -60,6 +64,7 @@ public class EmployeeController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success|OK")})
     public ResponseEntity<List<Employee>> employees(){
         List<Employee> employees = service.findAll();
+        LOGGER.debug("employees {}", employees);
         return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 }

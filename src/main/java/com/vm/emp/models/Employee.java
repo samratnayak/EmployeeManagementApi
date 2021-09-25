@@ -1,6 +1,14 @@
 package com.vm.emp.models;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "employee")
@@ -16,7 +24,12 @@ public class Employee {
     
     @Column
     private int age;
-
+    
+    @ManyToOne
+    @JoinColumn(name="managerid")
+    private Employee manager;
+   
+    
     public Integer getId() {
         return id;
     }
@@ -40,5 +53,18 @@ public class Employee {
 	public void setAge(int age) {
 		this.age = age;
 	}
-    
+
+	public Employee getManager() {
+		return manager;
+	}
+
+	public void setManager(Employee manager) {
+		this.manager = manager;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", age=" + age + ", manager=" + manager + "]";
+	}
+
 }

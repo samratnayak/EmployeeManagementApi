@@ -4,6 +4,7 @@ public class EmployeeRequest {
 
 	private String name;
 	private String age;
+	private String managerId;
 	
 	public String getName() {
 		return name;
@@ -17,6 +18,10 @@ public class EmployeeRequest {
 	public void setAge(String age) {
 		this.age = age;
 	}
-	
-	
+	public String getManagerId() {
+		return managerId;
+	}
+	public void setManagerId(String managerId) {
+		this.managerId = managerId;
+	}
 }
