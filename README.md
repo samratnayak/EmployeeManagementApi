@@ -19,7 +19,7 @@ Steps to Install :
      - From command line, run `java -jar EmployeeManagement-0.0.1-SNAPSHOT.jar`
      - On successful startup, explore API Docs: http://localhost:8080/swagger-ui.html
  5) Start the UI app
-    - Got UI project root where package.json is present
+    - Go to UI project root where package.json is present
     - Run `npm install`
     - Once it is complete after a few minutes, run `npm start`
     - Hit the browser with URL: http://localhost:3000 
