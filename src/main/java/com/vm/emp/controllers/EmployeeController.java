@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,12 +58,17 @@ public class EmployeeController {
 		if (resp.getErrors().size() > 0) {
 			return new ResponseEntity<EmployeeApiResponse<String>>(resp, HttpStatus.BAD_REQUEST);
 		}
-
 		Employee e = convertService.convertToModel(employeeRequestEntity);
 		int id = service.save(e).getId();
 
 		resp.setData("Success, id=" + id);
-		return new ResponseEntity<EmployeeApiResponse<String>>(resp, HttpStatus.CREATED);
+		return new ResponseEntity<EmployeeApiResponse<String>>(resp, addAccessHeader(), HttpStatus.CREATED);
+	}
+
+	private HttpHeaders addAccessHeader() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Access-Control-Allow-Origin", "*");
+		return headers;
 	}
 	
 	@PatchMapping("/employees/{empId}")
@@ -78,7 +84,7 @@ public class EmployeeController {
 		
 		final EmployeeApiResponse<String> emptyResp = validationService.validateAllEmpty(employeeRequestEntity);
 		if(emptyResp.getErrors().size() > 0) {
-			return new ResponseEntity<EmployeeApiResponse<String>>(emptyResp, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<EmployeeApiResponse<String>>(emptyResp, addAccessHeader(), HttpStatus.BAD_REQUEST);
 		}
 		
 		final Employee existingEmp = service.findById(empId);
@@ -96,7 +102,7 @@ public class EmployeeController {
 		final EmployeeApiResponse<String> successResp = new EmployeeApiResponse<String>();
 		successResp.setData("Successfully updated details for emp id "+empId);
 		
-		return new ResponseEntity<EmployeeApiResponse<String>>(successResp, HttpStatus.CREATED);
+		return new ResponseEntity<EmployeeApiResponse<String>>(successResp, addAccessHeader(), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/employees")
@@ -106,6 +112,7 @@ public class EmployeeController {
 		List<Employee> employees = service.findAll();
 		LOGGER.info("employees {}", employees.size());
 		return new ResponseEntity<>(employees.stream().map(EmployeeMapper::toEmployeeView).collect(Collectors.toList()),
+				addAccessHeader(),
 				HttpStatus.OK);
 	}
 
@@ -120,7 +127,7 @@ public class EmployeeController {
 		response.setData(view);
 		if(Objects.isNull(view)) {
 			response.getErrors().add("Common Manager Not Found!");
-			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(response, addAccessHeader(), HttpStatus.NOT_FOUND);
 		}
 		
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -145,7 +152,7 @@ public class EmployeeController {
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, addAccessHeader(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/employees/{empId}/managers")
@@ -164,7 +171,7 @@ public class EmployeeController {
 		
 		if(reporteesView.size() == 0) {
 			response.getErrors().add("No managers found in hierarchy for Employee id "+empId);
-			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(response, addAccessHeader(), HttpStatus.NOT_FOUND);
 		}
 		
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -183,6 +190,6 @@ public class EmployeeController {
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, addAccessHeader(), HttpStatus.OK);
 	}
 }
