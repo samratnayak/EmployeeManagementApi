@@ -3,16 +3,16 @@ package com.vm.apiresponses;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeApiResponse {
+public class EmployeeApiResponse<T> {
 
-	private String message;
-	private List<String> errors = new ArrayList<String>(0);
+	private T data;
+	private List<String> errors = new ArrayList<String>();
 	
-	public String getMessage() {
-		return message;
+	public T getData() {
+		return data;
 	}
-	public void setMessage(String message) {
-		this.message = message;
+	public void setData(T data) {
+		this.data = data;
 	}
 	public List<String> getErrors() {
 		return errors;

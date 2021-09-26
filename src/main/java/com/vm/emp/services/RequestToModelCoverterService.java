@@ -21,4 +21,20 @@ public class RequestToModelCoverterService {
 			e.setManager(empService.findById(Integer.parseInt(request.getManagerId())));
 		return e;
 	}
+	
+	public Employee mergeWithExistingEmployee(EmployeeRequest request, Employee existing) {
+		if(isValidString(request.getName())) {
+			existing.setName(request.getName());
+		}
+		if(isValidString(request.getAge())) {
+			existing.setAge(Integer.parseInt(request.getAge()));
+		}
+		if(isValidString(request.getManagerId()))
+			existing.setManager(empService.findById(Integer.parseInt(request.getManagerId())));
+		else {
+			existing.setManager(null);
+		}
+		return existing;
+	}
+	
 }
